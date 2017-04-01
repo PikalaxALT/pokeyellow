@@ -108,7 +108,7 @@ BeachHouse_GFX:
 BeachHouse_Block:
 	INCBIN "gfx/blocksets/beachhouse.bst"
 
-Func_f0a54:
+ret_f0a54:
 	ret
 
 LoadUnusedBluesHouseMissableObjectData:

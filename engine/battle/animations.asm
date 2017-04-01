@@ -240,7 +240,7 @@ PlayAnimation:
 	ld h, a
 	ld de, .nextAnimationCommand
 	push de
-	jp [hl] ; jump to special effect function
+	jp hl ; jump to special effect function
 .playSubanimation
 	ld c, a
 	and a, %00111111
@@ -481,7 +481,7 @@ PlayApplyingAttackAnimation:
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	jp [hl]
+	jp hl
 
 AnimationTypePointerTable:
 	dw ShakeScreenVertically ; enemy mon has used a damaging move without a side effect
@@ -574,20 +574,19 @@ SetAnimationPalette:
 	call UpdateGBCPal_OBP1
 	ret
 
-Func_78e98:
+BackUpScreenTilesToBuffer2AndClearScreen:
 	call SaveScreenTilesToBuffer2
 	xor a
 	ld [H_AUTOBGTRANSFERENABLED], a
 	call ClearScreen
 	ld h, vBGMap0 / $100
-	call WriteLowerByteOfBGMapAndEnableBGTransfer
+	call .transfer
 	call Delay3
 	xor a
 	ld [H_AUTOBGTRANSFERENABLED], a
 	call LoadScreenTilesFromBuffer2
 	ld h, vBGMap1 / $100
-
-WriteLowerByteOfBGMapAndEnableBGTransfer:
+.transfer
 	ld l, vBGMap0 & $ff
 	call BattleAnimCopyTileMapToVRAM
 	ld a, $1
@@ -690,7 +689,7 @@ DoSpecialEffectByAnimationId:
 	ld l, a
 	ld de, .done
 	push de
-	jp [hl]
+	jp hl
 .done
 	pop bc
 	pop de
@@ -1129,7 +1128,7 @@ CallWithTurnFlipped:
 	ld [H_WHOSETURN], a
 	ld de, .returnAddress
 	push de
-	jp [hl]
+	jp hl
 .returnAddress
 	pop af
 	ld [H_WHOSETURN], a
@@ -2334,7 +2333,7 @@ AnimationHideEnemyMonPic:
 	ld [H_AUTOBGTRANSFERENABLED], a
 	jp Delay3
 
-Func_79929:
+AnimationMinimizeMonIfMinimized:
 	ld hl, wPlayerMonMinimized
 	ld a, [H_WHOSETURN]
 	and a

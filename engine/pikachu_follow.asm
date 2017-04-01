@@ -537,7 +537,7 @@ Pointer_fc7e3:
 	db  0,  4
 
 Func_fc803:
-	call Func_fcae2
+	call IsPikachuOnTopOfPlayer
 	ret c
 	ld hl, wPikachuWalkAnimationCounter - wPikachuSpriteStateData1
 	add hl, bc
@@ -998,7 +998,7 @@ UpdatePikachuWalkingSprite:
 	ld a, [wFontLoaded]
 	bit 0, a
 	jr z, .normal_get_sprite_index
-	call Func_fcae2
+	call IsPikachuOnTopOfPlayer
 	ret c
 	jr .load_sprite_index
 
@@ -1027,7 +1027,7 @@ UpdatePikachuWalkingSprite:
 	ld [wPikachuSpriteImageIdx], a
 	ret
 
-Func_fcae2:
+IsPikachuOnTopOfPlayer:
 	ld hl, wPikachuMapY - wPikachuSpriteStateData1
 	add hl, bc
 	ld a, [wYCoord]

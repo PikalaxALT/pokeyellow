@@ -2893,7 +2893,7 @@ SelectMenuItem_CursorDown:
 	ld [wCurrentMenuItem], a
 	jp SelectMenuItem
 
-Func_3d4f5:
+DebugFunc_3d4f5:
 	bit 3, a
 	ld a, $0
 	jr nz, .asm_3d4fd
@@ -2901,7 +2901,7 @@ Func_3d4f5:
 .asm_3d4fd
 	ld [H_WHOSETURN], a
 	call LoadScreenTilesFromBuffer1
-	call Func_3d536
+	call DebugFunc_3d536
 	ld a, [wTestBattlePlayerSelectedMove]
 	and a
 	jp z, MoveSelectionMenu
@@ -2909,22 +2909,23 @@ Func_3d4f5:
 	xor a
 	ld [wAnimationType], a
 	predef MoveAnimation
-	callab Func_78e98
+	callab BackUpScreenTilesToBuffer2AndClearScreen
 	jp MoveSelectionMenu
 
-Func_3d523:
+DebugFunc_3d523:
 	ld a, [wTestBattlePlayerSelectedMove]
 	dec a
 	jr asm_3d52d
-Func_3d529:
+
+DebugFunc_3d529:
 	ld a, [wTestBattlePlayerSelectedMove]
 	inc a
 asm_3d52d:
 	ld [wTestBattlePlayerSelectedMove], a
-	call Func_3d536
+	call DebugFunc_3d536
 	jp MoveSelectionMenu
 
-Func_3d536:
+DebugFunc_3d536:
 	coord hl, 10, 16
 	lb bc, 2, 10
 	call ClearScreenArea
@@ -3307,7 +3308,7 @@ ExecutePlayerMove:
 	jp z, ExecutePlayerMoveDone
 	call CheckPlayerStatusConditions
 	jr nz, .playerHasNoSpecialCondition
-	jp [hl]
+	jp hl
 .playerHasNoSpecialCondition
 	call GetCurrentMove
 	ld hl, wPlayerBattleStatus1
@@ -5257,7 +5258,7 @@ AttackSubstitute:
 	ld a,[H_WHOSETURN]
 	xor a,$01
 	ld [H_WHOSETURN],a
-	callab Func_79929 ; animate the substitute breaking
+	callab AnimationMinimizeMonIfMinimized ; animate the substitute breaking
 ; flip the turn back to the way it was
 	ld a,[H_WHOSETURN]
 	xor a,$01
@@ -5855,7 +5856,7 @@ ExecuteEnemyMove:
 	ld [wDamageMultipliers], a
 	call CheckEnemyStatusConditions
 	jr nz, .enemyHasNoSpecialConditions
-	jp [hl]
+	jp hl
 .enemyHasNoSpecialConditions
 	ld hl, wEnemyBattleStatus1
 	bit ChargingUp, [hl] ; is the enemy charging up for attack?
@@ -7000,7 +7001,7 @@ PlayMoveAnimation:
 	ld [wAnimationID],a
 	call Delay3
 	predef MoveAnimation
-	callab Func_78e98
+	callab BackUpScreenTilesToBuffer2AndClearScreen
 	ret
 
 JumpMoveEffect:
@@ -7024,7 +7025,7 @@ _JumpMoveEffect:
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	jp [hl] ; jump to special effect handler
+	jp hl ; jump to special effect handler
 
 MoveEffectPointerTable:
 	 dw SleepEffect               ; unused effect
@@ -8655,7 +8656,7 @@ PlayBattleAnimationGotID:
 	push de
 	push bc
 	predef MoveAnimation
-	callab Func_78e98
+	callab BackUpScreenTilesToBuffer2AndClearScreen
 	pop bc
 	pop de
 	pop hl

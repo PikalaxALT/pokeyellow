@@ -7,7 +7,7 @@ INCLUDE "engine/pikachu_emotions.asm"
 INCLUDE "engine/pikachu_movement.asm"
 INCLUDE "engine/pikachu_pic_animation.asm"
 
-Func_fe66e:
+ret_fe66e:
 	ret
 
 OfficerJennySprite:    INCBIN "gfx/sprites/officer_jenny.2bpp"
